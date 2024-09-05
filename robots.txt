@@ -1,0 +1,3 @@
+User-agent: *
+Allow:/
+Sitemap: http://arcapredict.kro.kr/sitemap.xml

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>아카라이브 나무게임 예측기</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: black;
+            font-size: 2em;
+            margin-bottom: 50px;
+        }
+
+        table {
+            width: 80%;
+            max-width: 600px;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #0066cc;
+            color: white;
+            font-weight: bold;
+        }
+
+        td {
+            background-color: #e9f2fb;
+            font-size: 1.2em;
+        }
+
+        .warning {
+            font-size: 0.9em;
+            color: red;
+            margin-bottom: 20px;
+        }
+
+        .button-container {
+            margin-top: 20px;
+        }
+
+        .button-container a button {
+            background-color: #0066cc;
+            color: white;
+            padding: 10px 20px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .button-container a button:hover {
+            background-color: #004a99;
+        }
+    </style>
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            let xhr = new XMLHttpRequest();
+            xhr.open("GET", "final.txt", true);
+            xhr.onreadystatechange = function() {
+                if(xhr.readyState === 4 && xhr.status === 200) {
+                    let text = xhr.responseText;
+                    let lines = text.split('\n')[0].split(" | ");
+                    document.getElementById('number').innerHTML = lines[0];
+                    document.getElementById('start').innerHTML = lines[1];
+                }
+            };
+            xhr.send();
+        });
+    </script>
+</head>
+<body>
+    <h1>아카라이브 나무게임 예측기</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>번호</th>
+                <th>방향</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td id="number">0</td>
+                <td id="start">0</td>
+            </tr>
+        </tbody>
+    </table>
+    <p class="warning">※ 본 예측 결과는 정답이 아니라 참고용으로 봐주세요!</p>
+    
+    <div class="button-container">
+        <a href="https://arca.live/b/namugame" target="_blank">
+            <button>아카라이브 온도계 바로가기</button>
+        </a>
+    </div>
+</body>
+</html>
+

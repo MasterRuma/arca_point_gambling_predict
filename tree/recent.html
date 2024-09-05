@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나무게임 기록</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        input[type="number"] {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 200px; /* Adjusted width */
+            margin-right: 10px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 10px 25px; /* Adjusted padding for wider button */
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            transition: background-color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-align: center;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            text-align: center;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #007BFF;
+            color: #fff;
+            text-align: center;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9; /* Removed gray background for '짝' rows */
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .pagination button {
+            text-align: center;
+        }
+        .download-container {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .download-container button {
+            margin-right: 10px;
+            padding: 10px 20px; /* Adjust padding for the button */
+            font-size: 16px; /* Ensure the font size matches the icon size */
+        }
+        .download-container img {
+            height: 24px; /* Adjust size to match text size */
+            filter: invert(100%); /* White color for the image */
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
+            <input type="number" id="numRecords" placeholder="숫자를 입력하시오." min="1">
+            <button onclick="fetchAndDisplayData()">조회</button>
+        </div>
+        
+        <table id="dataTable">
+            <thead>
+                <tr>
+                    <th>회차</th>
+                    <th>슬롯</th>
+                    <th>군집</th>
+                    <th>홀짝</th>
+                    <th>시작 방향</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data will be inserted here -->
+            </tbody>
+        </table>
+        
+        <div class="pagination hidden" id="paginationControls">
+            <button id="prevButton" onclick="previousPage()">이전</button>
+            <button id="nextButton" onclick="nextPage()">다음</button>
+        </div>
+        
+        <div class="download-container hidden" id="downloadControls">
+            <button onclick="downloadCSV()"> 
+                <img src="download.png" alt="Download Icon"> CSV 다운로드 하기
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let csvData = [];
+        let currentPage = 1;
+        let recordsPerPage = 0;
+
+        function fetchAndDisplayData() {
+            const numRecords = parseInt(document.getElementById('numRecords').value);
+            if (isNaN(numRecords) || numRecords <= 0) {
+                alert('숫자를 입력해 주세요.');
+                return;
+            }
+            recordsPerPage = numRecords;
+            currentPage = 1;  // Reset to the first page
+            fetch('dataset.csv')
+                .then(response => response.text())
+                .then(text => {
+                    parseCSV(text);
+                    displayData();
+                    document.getElementById('paginationControls').classList.remove('hidden');
+                    document.getElementById('downloadControls').classList.remove('hidden');
+                })
+                .catch(error => console.error('Error loading CSV:', error));
+        }
+
+        function parseCSV(text) {
+            // Split the CSV data into lines, remove empty lines, and ensure no extra empty lines
+            const lines = text.trim().split('\n').filter(line => line.trim() !== '');
+            csvData = lines.map(line => {
+                const parts = line.split(',');
+                return {
+                    Round: parts[0].replace(/"/g, ''), // Remove " characters
+                    Slot: parts[1].replace(/"/g, ''),  // Remove " characters
+                    Army: parts[2].replace(/"/g, ''),  // Remove " characters
+                    OOE: parts[3].replace(/"/g, ''),   // Remove " characters
+                    Start: parts[4].replace(/"/g, '')  // Remove " characters
+                };
+            });
+
+            // Reverse the order to show latest data first
+            csvData.reverse();
+        }
+
+        function displayData() {
+            if (csvData.length === 0) return;
+
+            // Calculate start and end indices for the current page
+            const totalRecords = csvData.length;
+            const startIndex = (currentPage - 1) * recordsPerPage;
+            const endIndex = Math.min(totalRecords, startIndex + recordsPerPage);
+            const visibleData = csvData.slice(startIndex, endIndex);
+
+            const tableBody = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
+            tableBody.innerHTML = ''; // Clear existing rows
+            
+            visibleData.forEach(row => {
+                const newRow = tableBody.insertRow();
+                newRow.insertCell().textContent = row.Round;
+                newRow.insertCell().textContent = row.Slot;
+                newRow.insertCell().textContent = row.Army;
+                newRow.insertCell().textContent = row.OOE;
+                newRow.insertCell().textContent = row.Start;
+            });
+
+            // Update button states
+            updateButtonStates();
+        }
+
+        function updateButtonStates() {
+            const totalRecords = csvData.length;
+            const startIndex = (currentPage - 1) * recordsPerPage;
+            const endIndex = Math.min(totalRecords, startIndex + recordsPerPage);
+
+            // Enable or disable the previous button
+            document.getElementById('prevButton').disabled = currentPage <= 1;
+
+            // Enable or disable the next button
+            document.getElementById('nextButton').disabled = endIndex >= totalRecords;
+        }
+
+        function nextPage() {
+            const totalRecords = csvData.length;
+            if (currentPage * recordsPerPage < totalRecords) {
+                currentPage++;
+                displayData();
+            }
+        }
+
+        function previousPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                displayData();
+            }
+        }
+
+        function downloadCSV() {
+            let csvContent = "data:text/csv;charset=utf-8,";
+            const tableBody = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
+            const rows = tableBody.getElementsByTagName('tr');
+
+            for (let row of rows) {
+                let cells = row.getElementsByTagName('td');
+                let rowData = Array.from(cells).map(cell => cell.textContent.trim()).join(",");
+                if (rowData) { // Ensure non-empty rows
+                    csvContent += rowData + "\r\n";
+                }
+            }
+
+            // Remove trailing newline if present
+            csvContent = csvContent.trimEnd();
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "table_data.csv");
+            document.body.appendChild(link);
+
+            link.click();
+            document.body.removeChild(link); // Clean up after download
+        }
+    </script>
+</body>
+</html>
+
