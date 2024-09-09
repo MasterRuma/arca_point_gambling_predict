@@ -1,115 +1,220 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>아카라이브 나무게임 예측기</title>
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f4f4f9;
+        color: #333;
+        margin: 0;
+        padding: 0px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
 
-        h1 {
-            color: black;
-            font-size: 2em;
-            margin-bottom: 50px;
-        }
+      h1 {
+        margin-top: 30px;
+        color: black;
+        font-size: 2em;
+        margin-bottom: 50px;
+      }
 
-        table {
-            width: 80%;
-            max-width: 600px;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
+      table {
+        width: 80%;
+        max-width: 600px;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+      }
 
-        th, td {
-            padding: 10px;
-            text-align: center;
-            border: 1px solid #ddd;
-        }
+      th,
+      td {
+        padding: 10px;
+        text-align: center;
+        border: 1px solid #ddd;
+      }
 
-        th {
-            background-color: #0066cc;
-            color: white;
-            font-weight: bold;
-        }
+      th {
+        background-color: #0066cc;
+        color: white;
+        font-weight: bold;
+      }
 
-        td {
-            background-color: #e9f2fb;
-            font-size: 1.2em;
-        }
+      td {
+        background-color: #e9f2fb;
+        font-size: 1.2em;
+      }
 
-        .warning {
-            font-size: 0.9em;
-            color: red;
-            margin-bottom: 20px;
-        }
+      .warning {
+        font-size: 0.9em;
+        color: red;
+        margin-bottom: 20px;
+      }
 
-        .button-container {
-            margin-top: 20px;
-        }
+      .button-container {
+        margin-top: 20px;
+      }
 
-        .button-container a button {
-            background-color: #0066cc;
-            color: white;
-            padding: 10px 20px;
-            font-size: 1em;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+      .button-container a button {
+        background-color: #0066cc;
+        color: white;
+        padding: 10px 20px;
+        font-size: 1em;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
 
-        .button-container a button:hover {
-            background-color: #004a99;
-        }
+      .button-container a button:hover {
+        background-color: #004a99;
+      }
+      i {
+        align-self: start;
+        margin-top: 30px; /* 페이지 상단에서 10px 떨어진 위치 */
+        margin-left: 30px; /* 왼쪽에서 10px 떨어진 위치 */
+        font-size: 45px;
+        color: black;
+        cursor: pointer;
+        z-index: 1002; /* 다른 요소들 위에 배치 */
+        margin-bottom: 20px;
+      }
+      /* 배경을 어둡게 처리하는 오버레이 */
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        display: none;
+        z-index: 1000;
+      }
+      /* 사이드바 스타일 */
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: -250px;
+        width: 200px;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        align-items: center;
+        padding: 20px;
+        transition: left 1s ease;
+        z-index: 1001;
+      }
+      .sidebar.show {
+        left: 0;
+      }
+      .sidebar a {
+        color: white;
+        text-decoration: none;
+        font-size: 18px;
+        margin: 15px 0;
+        transition: color 0.3s;
+      }
+      .sidebar a:hover {
+        color: #4caf50;
+      }
+      .content {
+        margin-left: 0;
+        text-align: center;
+        width: 100%;
+      }
+      .menu-icon {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        font-size: 30px;
+        color: white;
+        cursor: pointer;
+        z-index: 1002;
+      }
     </style>
     <script>
-        window.addEventListener('DOMContentLoaded', function() {
-            let xhr = new XMLHttpRequest();
-            xhr.open("GET", "final.txt", true);
-            xhr.onreadystatechange = function() {
-                if(xhr.readyState === 4 && xhr.status === 200) {
-                    let text = xhr.responseText;
-                    let lines = text.split('\n')[0].split(" | ");
-                    document.getElementById('number').innerHTML = lines[0];
-                    document.getElementById('start').innerHTML = lines[1];
-                }
-            };
-            xhr.send();
-        });
+      window.addEventListener("DOMContentLoaded", function () {
+        let xhr = new XMLHttpRequest();
+        xhr.open("GET", "final.txt", true);
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            let text = xhr.responseText;
+            let lines = text.split("\n")[0].split(" | ");
+            document.getElementById("number").innerHTML = lines[0];
+            document.getElementById("start").innerHTML = lines[1];
+          }
+        };
+        xhr.send();
+      });
     </script>
-</head>
-<body>
+  </head>
+  <body>
+    <i class="bx bx-menu" onclick="toggleMenu()"></i>
+
+    <!-- 오버레이 (배경을 어둡게 만들기 위한 요소) -->
+    <div class="overlay" id="overlay" onclick="closeMenu()"></div>
+
+    <!-- 사이드 메뉴바 -->
+    <div class="sidebar" id="sidebar">
+      <a></a>
+      <a></a>
+      <a href="https://arcapredict.kro.kr/index.html">홈</a>
+      <a href="https://arcapredict.kro.kr/thermo/predict.html">온도계 예측</a>
+      <a href="https://arcapredict.kro.kr/thermo/recent.html">온도계 기록</a>
+      <a href="https://arcapredict.kro.kr/thermo/main.html">온도계 통계</a>
+      <a href="https://arcapredict.kro.kr/tree/predict.html">나무게임 예측</a>
+      <a href="https://arcapredict.kro.kr/tree/recent.html">나무게임 기록</a>
+      <a href="https://arcapredict.kro.kr/tree/main.html">나무게임 통계</a>
+    </div>
+    <script>
+      // 사이드 메뉴와 오버레이 보이기/숨기기 기능
+      function toggleMenu() {
+        var sidebar = document.getElementById("sidebar");
+        var overlay = document.getElementById("overlay");
+        sidebar.classList.toggle("show");
+        overlay.style.display = sidebar.classList.contains("show")
+          ? "block"
+          : "none";
+      }
+
+      // 메뉴가 아닌 다른 곳을 클릭하면 메뉴 닫기
+      function closeMenu() {
+        var sidebar = document.getElementById("sidebar");
+        var overlay = document.getElementById("overlay");
+        sidebar.classList.remove("show");
+        overlay.style.display = "none";
+      }
+    </script>
     <h1>아카라이브 나무게임 예측기</h1>
     <table>
-        <thead>
-            <tr>
-                <th>번호</th>
-                <th>방향</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td id="number">0</td>
-                <td id="start">0</td>
-            </tr>
-        </tbody>
+      <thead>
+        <tr>
+          <th>번호</th>
+          <th>방향</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td id="number">0</td>
+          <td id="start">0</td>
+        </tr>
+      </tbody>
     </table>
     <p class="warning">※ 본 예측 결과는 정답이 아니라 참고용으로 봐주세요!</p>
-    
-    <div class="button-container">
-        <a href="https://arca.live/b/namugame" target="_blank">
-            <button>아카라이브 온도계 바로가기</button>
-        </a>
-    </div>
-</body>
-</html>
 
+    <div class="button-container">
+      <a href="https://arca.live/b/namugame" target="_blank">
+        <button>아카라이브 온도계 바로가기</button>
+      </a>
+    </div>
+  </body>
+</html>
