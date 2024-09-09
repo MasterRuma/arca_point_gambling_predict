@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="kr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>아카라이브 온도계 예측</title>
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <script>
+      window.addEventListener("DOMContentLoaded", function () {
+        let intervalId;
+
+        function updateThermometer() {
+          fetch("final.txt")
+            .then((response) => response.text())
+            .then((txtData) => {
+              const data = txtData.trim();
+              const temperature = parseInt(data);
+              const thermometerFill =
+                document.getElementById("thermometer-fill");
+              const maxThermometerHeight = 100;
+              const thermometerHeight = Math.min(
+                temperature,
+                maxThermometerHeight
+              );
+              thermometerFill.style.height = `${thermometerHeight}%`;
+
+              document.getElementById("number").textContent = data;
+
+              const balloonPosition =
+                thermometerHeight >= maxThermometerHeight
+                  ? maxThermometerHeight + 20
+                  : thermometerHeight + 20;
+              balloon.style.bottom = `${balloonPosition}%`;
+
+              document.getElementById("number").textContent = data;
+            });
+        }
+
+        updateThermometer();
+        intervalId = setInterval(updateThermometer, 1000);
+      });
+
+      window.addEventListener("beforeunload", function () {
+        clearInterval(intervalId);
+      });
+    </script>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #f9f9f9;
+        color: #333;
+        font-family: "HancomMalangMalang-Regular", sans-serif;
+        margin: 0;
+        padding: 20px;
+        height: 90vh;
+        max-height: 100%;
+      }
+
+      h1 {
+        font-family: "Freesentation-5Medium", sans-serif;
+        font-size: 2.5rem;
+        color: black;
+        margin-bottom: 40px;
+      }
+
+      .thermometer {
+        position: relative;
+        width: 60px;
+        height: 200px;
+        background-color: #e0e0e0;
+        border-radius: 30px;
+        border: 2px solid #007bff;
+        overflow: hidden;
+        margin-bottom: 20px;
+      }
+
+      .thermometer-fill {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background-color: #ff4500;
+        border-bottom-left-radius: 30px;
+        border-bottom-right-radius: 30px;
+        transition: height 0.3s ease-in-out;
+      }
+
+      /* 화면 크기가 작아질 때 폰트 크기 조절 */
+      @media (max-width: 600px) {
+        h1 {
+          font-size: 1.8rem !important;
+        }
+
+        .warning {
+          font-size: 1rem !important;
+        }
+      }
+
+      #number {
+        font-family: "HancomMalangMalang-Regular", sans-serif;
+        font-size: 30px;
+        margin-top: 20px;
+      }
+
+      .warning {
+        font-weight: bold;
+        color: red;
+        margin-top: 10px;
+        margin-bottom: 30px;
+        text-align: center;
+      }
+
+      .button-container {
+        text-align: center;
+        margin-top: 20px;
+      }
+
+      .button-container a {
+        text-decoration: none;
+      }
+
+      .button-container button {
+        border-radius: 50px;
+        background-color: #007bff;
+        color: white;
+        font-size: 1rem;
+        padding: 12px 25px;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        font-family: "Freesentation-5Medium", sans-serif;
+      }
+
+      .button-container button:hover {
+        background-color: #0056b3;
+      }
+
+      .button-container button:active {
+        background-color: #00408a;
+      }
+
+      i {
+        position: absolute;
+        top: 30px; /* 페이지 상단에서 10px 떨어진 위치 */
+        left: 30px; /* 왼쪽에서 10px 떨어진 위치 */
+        font-size: 45px;
+        color: black;
+        cursor: pointer;
+        z-index: 1002; /* 다른 요소들 위에 배치 */
+        margin-bottom: 20px;
+      }
+      /* 배경을 어둡게 처리하는 오버레이 */
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        display: none;
+        z-index: 1000;
+      }
+      /* 사이드바 스타일 */
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: -250px;
+        width: 200px;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        align-items: center;
+        padding: 20px;
+        transition: left 1s ease;
+        z-index: 1001;
+      }
+      .sidebar.show {
+        left: 0;
+      }
+      .sidebar a {
+        color: white;
+        text-decoration: none;
+        font-size: 18px;
+        margin: 15px 0;
+        transition: color 0.3s;
+      }
+      .sidebar a:hover {
+        color: #4caf50;
+      }
+      .content {
+        margin-left: 0;
+        text-align: center;
+        width: 100%;
+      }
+      .menu-icon {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        font-size: 30px;
+        color: white;
+        cursor: pointer;
+        z-index: 1002;
+      }
+    </style>
+  </head>
+  <body>
+    <i class="bx bx-menu" onclick="toggleMenu()"></i>
+
+    <!-- 오버레이 (배경을 어둡게 만들기 위한 요소) -->
+    <div class="overlay" id="overlay" onclick="closeMenu()"></div>
+
+    <!-- 사이드 메뉴바 -->
+    <div class="sidebar" id="sidebar">
+      <a></a>
+      <a></a>
+      <a href="https://arcapredict.kro.kr/index.html">홈</a>
+      <a href="https://arcapredict.kro.kr/thermo/predict.html">온도계 예측</a>
+      <a href="https://arcapredict.kro.kr/thermo/recent.html">온도계 기록</a>
+      <a href="https://arcapredict.kro.kr/thermo/main.html">온도계 통계</a>
+      <a href="https://arcapredict.kro.kr/tree/predict.html">나무게임 예측</a>
+      <a href="https://arcapredict.kro.kr/tree/recent.html">나무게임 기록</a>
+      <a href="https://arcapredict.kro.kr/tree/main.html">나무게임 통계</a>
+    </div>
+    <script>
+      // 사이드 메뉴와 오버레이 보이기/숨기기 기능
+      function toggleMenu() {
+        var sidebar = document.getElementById("sidebar");
+        var overlay = document.getElementById("overlay");
+        sidebar.classList.toggle("show");
+        overlay.style.display = sidebar.classList.contains("show")
+          ? "block"
+          : "none";
+      }
+
+      // 메뉴가 아닌 다른 곳을 클릭하면 메뉴 닫기
+      function closeMenu() {
+        var sidebar = document.getElementById("sidebar");
+        var overlay = document.getElementById("overlay");
+        sidebar.classList.remove("show");
+        overlay.style.display = "none";
+      }
+    </script>
+    <h1>아카라이브 온도계 예측</h1>
+
+    <div class="thermometer">
+      <div
+        id="thermometer-fill"
+        class="thermometer-fill"
+        style="height: 0"
+      ></div>
+    </div>
+
+    <p id="number">00</p>
+
+    <p class="warning">※ 본 예측 결과는 정답이 아니라 참고용으로 봐주세요!</p>
+
+    <div class="button-container">
+      <a href="https://arca.live/b/thermometer" target="_blank">
+        <button>아카라이브 온도계 바로가기</button>
+      </a>
+    </div>
+  </body>
+</html>
