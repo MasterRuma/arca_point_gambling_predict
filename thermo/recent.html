@@ -1,252 +1,385 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>온도계 기록</title>
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
-            margin: 0;
-            padding: 20px;
-            text-align: center;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        input[type="number"] {
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            width: 200px;
-            margin-right: 10px;
-            box-sizing: border-box;
-        }
-        button {
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            padding: 10px 25px;
-            font-size: 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            margin: 5px;
-            transition: background-color 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            text-align: center;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        button:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            text-align: center;
-        }
-        th, td {
-            padding: 10px;
-            border: 1px solid #ddd;
-        }
-        th {
-            background-color: #007BFF;
-            color: #fff;
-            text-align: center;
-        }
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        .pagination button {
-            text-align: center;
-        }
-        .download-container {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            margin-top: 20px;
-        }
-        .download-container button {
-            margin-right: 10px;
-            padding: 10px 20px;
-            font-size: 16px;
-        }
-        .download-container img {
-            height: 24px;
-            filter: invert(100%);
-        }
-        .hidden {
-            display: none;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+        margin: 0;
+        padding: 20px;
+        text-align: center;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      input[type="number"] {
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        width: 200px;
+        margin-right: 10px;
+        box-sizing: border-box;
+      }
+      button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px 25px;
+        font-size: 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin: 5px;
+        transition: background-color 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        text-align: center;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+      button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        text-align: center;
+      }
+      th,
+      td {
+        padding: 10px;
+        border: 1px solid #ddd;
+      }
+      th {
+        background-color: #007bff;
+        color: #fff;
+        text-align: center;
+      }
+      tr:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+      .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+      }
+      .pagination button {
+        text-align: center;
+      }
+      .download-container {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin-top: 20px;
+      }
+      .download-container button {
+        margin-right: 10px;
+        padding: 10px 20px;
+        font-size: 16px;
+      }
+      .download-container img {
+        height: 24px;
+        filter: invert(100%);
+      }
+      .hidden {
+        display: none;
+      }
+      i {
+        position: absolute;
+        top: 30px; /* 페이지 상단에서 10px 떨어진 위치 */
+        left: 30px; /* 왼쪽에서 10px 떨어진 위치 */
+        font-size: 45px;
+        color: black;
+        cursor: pointer;
+        z-index: 1002; /* 다른 요소들 위에 배치 */
+        margin-bottom: 20px;
+      }
+      /* 배경을 어둡게 처리하는 오버레이 */
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        display: none;
+        z-index: 1000;
+      }
+      /* 사이드바 스타일 */
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: -250px;
+        width: 200px;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        align-items: center;
+        padding: 20px;
+        transition: left 1s ease;
+        z-index: 1001;
+      }
+      .sidebar.show {
+        left: 0;
+      }
+      .sidebar a {
+        color: white;
+        text-decoration: none;
+        font-size: 18px;
+        margin: 15px 0;
+        transition: color 0.3s;
+      }
+      .sidebar a:hover {
+        color: #4caf50;
+      }
+      .content {
+        margin-left: 0;
+        text-align: center;
+        width: 100%;
+      }
+      .menu-icon {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        font-size: 30px;
+        color: white;
+        cursor: pointer;
+        z-index: 1002;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
+    <i class="bx bx-menu" onclick="toggleMenu()"></i>
+
+    <!-- 오버레이 (배경을 어둡게 만들기 위한 요소) -->
+    <div class="overlay" id="overlay" onclick="closeMenu()"></div>
+
+    <!-- 사이드 메뉴바 -->
+    <div class="sidebar" id="sidebar">
+      <a></a>
+      <a></a>
+      <a href="https://arcapredict.kro.kr/index.html">홈</a>
+      <a href="https://arcapredict.kro.kr/thermo/predict.html">온도계 예측</a>
+      <a href="https://arcapredict.kro.kr/thermo/recent.html">온도계 기록</a>
+      <a href="https://arcapredict.kro.kr/thermo/main.html">온도계 통계</a>
+      <a href="https://arcapredict.kro.kr/tree/predict.html">나무게임 예측</a>
+      <a href="https://arcapredict.kro.kr/tree/recent.html">나무게임 기록</a>
+      <a href="https://arcapredict.kro.kr/tree/main.html">나무게임 통계</a>
+    </div>
+    <script>
+      // 사이드 메뉴와 오버레이 보이기/숨기기 기능
+      function toggleMenu() {
+        var sidebar = document.getElementById("sidebar");
+        var overlay = document.getElementById("overlay");
+        sidebar.classList.toggle("show");
+        overlay.style.display = sidebar.classList.contains("show")
+          ? "block"
+          : "none";
+      }
+
+      // 메뉴가 아닌 다른 곳을 클릭하면 메뉴 닫기
+      function closeMenu() {
+        var sidebar = document.getElementById("sidebar");
+        var overlay = document.getElementById("overlay");
+        sidebar.classList.remove("show");
+        overlay.style.display = "none";
+      }
+    </script>
     <div class="container">
-        <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
-            <input type="number" id="numRecords" placeholder="숫자를 입력하시오." min="1">
-            <button onclick="fetchAndDisplayData()">조회</button>
-        </div>
-        
-        <table id="dataTable">
-            <thead>
-                <tr>
-                    <th>회차</th>
-                    <th>정 온도</th>
-                    <th>역 온도</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Data will be inserted here -->
-            </tbody>
-        </table>
-        
-        <div class="pagination hidden" id="paginationControls">
-            <button id="prevButton" onclick="previousPage()">이전</button>
-            <button id="nextButton" onclick="nextPage()">다음</button>
-        </div>
-        
-        <div class="download-container hidden" id="downloadControls">
-            <button onclick="downloadCSV()"> 
-                <img src="download.png" alt="Download Icon"> CSV 다운로드 하기
-            </button>
-        </div>
+      <div
+        style="
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-bottom: 20px;
+        "
+      >
+        <input
+          type="number"
+          id="numRecords"
+          placeholder="숫자를 입력하시오."
+          min="1"
+        />
+        <button onclick="fetchAndDisplayData()">조회</button>
+      </div>
+
+      <table id="dataTable">
+        <thead>
+          <tr>
+            <th>회차</th>
+            <th>정 온도</th>
+            <th>역 온도</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Data will be inserted here -->
+        </tbody>
+      </table>
+
+      <div class="pagination hidden" id="paginationControls">
+        <button id="prevButton" onclick="previousPage()">이전</button>
+        <button id="nextButton" onclick="nextPage()">다음</button>
+      </div>
+
+      <div class="download-container hidden" id="downloadControls">
+        <button onclick="downloadCSV()">
+          <img src="download.png" alt="Download Icon" /> CSV 다운로드 하기
+        </button>
+      </div>
     </div>
 
     <script>
-        let csvData = [];
-        let currentPage = 1;
-        let recordsPerPage = 0;
+      let csvData = [];
+      let currentPage = 1;
+      let recordsPerPage = 0;
 
-        function fetchAndDisplayData() {
-            const numRecords = parseInt(document.getElementById('numRecords').value);
-            if (isNaN(numRecords) || numRecords <= 0) {
-                alert('숫자를 입력해 주세요.');
-                return;
-            }
-            recordsPerPage = numRecords;
-            currentPage = 1;  // Reset to the first page
-            fetch('dataset.csv')
-                .then(response => response.text())
-                .then(text => {
-                    parseCSV(text);
-                    displayData();
-                    document.getElementById('paginationControls').classList.remove('hidden');
-                    document.getElementById('downloadControls').classList.remove('hidden');
-                })
-                .catch(error => console.error('Error loading CSV:', error));
+      function fetchAndDisplayData() {
+        const numRecords = parseInt(
+          document.getElementById("numRecords").value
+        );
+        if (isNaN(numRecords) || numRecords <= 0) {
+          alert("숫자를 입력해 주세요.");
+          return;
+        }
+        recordsPerPage = numRecords;
+        currentPage = 1; // Reset to the first page
+        fetch("dataset.csv")
+          .then((response) => response.text())
+          .then((text) => {
+            parseCSV(text);
+            displayData();
+            document
+              .getElementById("paginationControls")
+              .classList.remove("hidden");
+            document
+              .getElementById("downloadControls")
+              .classList.remove("hidden");
+          })
+          .catch((error) => console.error("Error loading CSV:", error));
+      }
+
+      function parseCSV(text) {
+        // Split the CSV data into lines, remove empty lines, and ensure no extra empty lines
+        const lines = text
+          .trim()
+          .split("\n")
+          .filter((line) => line.trim() !== "");
+        csvData = lines.map((line) => {
+          const parts = line.split(",");
+          return {
+            Round: parts[0].replace(/"/g, ""), // 회차
+            RegularTemp: parts[1].replace(/"/g, ""), // 정 온도
+            ReverseTemp: parts[2].replace(/"/g, ""), // 역 온도
+          };
+        });
+
+        // Reverse the order to show latest data first
+        csvData.reverse();
+      }
+
+      function displayData() {
+        if (csvData.length === 0) return;
+
+        // Calculate start and end indices for the current page
+        const totalRecords = csvData.length;
+        const startIndex = (currentPage - 1) * recordsPerPage;
+        const endIndex = Math.min(totalRecords, startIndex + recordsPerPage);
+        const visibleData = csvData.slice(startIndex, endIndex);
+
+        const tableBody = document
+          .getElementById("dataTable")
+          .getElementsByTagName("tbody")[0];
+        tableBody.innerHTML = ""; // Clear existing rows
+
+        visibleData.forEach((row) => {
+          const newRow = tableBody.insertRow();
+          newRow.insertCell().textContent = row.Round;
+          newRow.insertCell().textContent = row.RegularTemp;
+          newRow.insertCell().textContent = row.ReverseTemp;
+        });
+
+        // Update button states
+        updateButtonStates();
+      }
+
+      function updateButtonStates() {
+        const totalRecords = csvData.length;
+        const startIndex = (currentPage - 1) * recordsPerPage;
+        const endIndex = Math.min(totalRecords, startIndex + recordsPerPage);
+
+        // Enable or disable the previous button
+        document.getElementById("prevButton").disabled = currentPage <= 1;
+
+        // Enable or disable the next button
+        document.getElementById("nextButton").disabled =
+          endIndex >= totalRecords;
+      }
+
+      function nextPage() {
+        const totalRecords = csvData.length;
+        if (currentPage * recordsPerPage < totalRecords) {
+          currentPage++;
+          displayData();
+        }
+      }
+
+      function previousPage() {
+        if (currentPage > 1) {
+          currentPage--;
+          displayData();
+        }
+      }
+
+      function downloadCSV() {
+        let csvContent = "data:text/csv;charset=utf-8,";
+        const tableBody = document
+          .getElementById("dataTable")
+          .getElementsByTagName("tbody")[0];
+        const rows = tableBody.getElementsByTagName("tr");
+
+        for (let row of rows) {
+          let cells = row.getElementsByTagName("td");
+          let rowData = Array.from(cells)
+            .map((cell) => cell.textContent.trim())
+            .join(",");
+          if (rowData) {
+            // Ensure non-empty rows
+            csvContent += rowData + "\r\n";
+          }
         }
 
-        function parseCSV(text) {
-            // Split the CSV data into lines, remove empty lines, and ensure no extra empty lines
-            const lines = text.trim().split('\n').filter(line => line.trim() !== '');
-            csvData = lines.map(line => {
-                const parts = line.split(',');
-                return {
-                    Round: parts[0].replace(/"/g, ''), // 회차
-                    RegularTemp: parts[1].replace(/"/g, ''),  // 정 온도
-                    ReverseTemp: parts[2].replace(/"/g, '')  // 역 온도
-                };
-            });
+        // Remove trailing newline if present
+        csvContent = csvContent.trimEnd();
 
-            // Reverse the order to show latest data first
-            csvData.reverse();
-        }
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "table_data.csv");
+        document.body.appendChild(link);
 
-        function displayData() {
-            if (csvData.length === 0) return;
-
-            // Calculate start and end indices for the current page
-            const totalRecords = csvData.length;
-            const startIndex = (currentPage - 1) * recordsPerPage;
-            const endIndex = Math.min(totalRecords, startIndex + recordsPerPage);
-            const visibleData = csvData.slice(startIndex, endIndex);
-
-            const tableBody = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
-            tableBody.innerHTML = ''; // Clear existing rows
-            
-            visibleData.forEach(row => {
-                const newRow = tableBody.insertRow();
-                newRow.insertCell().textContent = row.Round;
-                newRow.insertCell().textContent = row.RegularTemp;
-                newRow.insertCell().textContent = row.ReverseTemp;
-            });
-
-            // Update button states
-            updateButtonStates();
-        }
-
-        function updateButtonStates() {
-            const totalRecords = csvData.length;
-            const startIndex = (currentPage - 1) * recordsPerPage;
-            const endIndex = Math.min(totalRecords, startIndex + recordsPerPage);
-
-            // Enable or disable the previous button
-            document.getElementById('prevButton').disabled = currentPage <= 1;
-
-            // Enable or disable the next button
-            document.getElementById('nextButton').disabled = endIndex >= totalRecords;
-        }
-
-        function nextPage() {
-            const totalRecords = csvData.length;
-            if (currentPage * recordsPerPage < totalRecords) {
-                currentPage++;
-                displayData();
-            }
-        }
-
-        function previousPage() {
-            if (currentPage > 1) {
-                currentPage--;
-                displayData();
-            }
-        }
-
-        function downloadCSV() {
-            let csvContent = "data:text/csv;charset=utf-8,";
-            const tableBody = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
-            const rows = tableBody.getElementsByTagName('tr');
-
-            for (let row of rows) {
-                let cells = row.getElementsByTagName('td');
-                let rowData = Array.from(cells).map(cell => cell.textContent.trim()).join(",");
-                if (rowData) { // Ensure non-empty rows
-                    csvContent += rowData + "\r\n";
-                }
-            }
-
-            // Remove trailing newline if present
-            csvContent = csvContent.trimEnd();
-
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "table_data.csv");
-            document.body.appendChild(link);
-
-            link.click();
-            document.body.removeChild(link); // Clean up after download
-        }
+        link.click();
+        document.body.removeChild(link); // Clean up after download
+      }
     </script>
-</body>
+  </body>
 </html>
-
