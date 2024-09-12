@@ -9,6 +9,7 @@
       rel="stylesheet"
     />
     <style>
+      /* 라이트모드 (기본) */
       body {
         font-family: Arial, sans-serif;
         background-color: #f4f4f4;
@@ -19,7 +20,7 @@
       }
       .container {
         max-width: 800px;
-        margin: 0 auto;
+        margin: 100px auto;
         background: #fff;
         padding: 20px;
         border-radius: 8px;
@@ -30,7 +31,7 @@
         font-size: 16px;
         border: 1px solid #ddd;
         border-radius: 4px;
-        width: 200px; /* Adjusted width */
+        width: 200px;
         margin-right: 10px;
         box-sizing: border-box;
       }
@@ -38,7 +39,7 @@
         background-color: #007bff;
         color: #fff;
         border: none;
-        padding: 10px 25px; /* Adjusted padding for wider button */
+        padding: 10px 25px;
         font-size: 16px;
         border-radius: 4px;
         cursor: pointer;
@@ -74,7 +75,7 @@
         text-align: center;
       }
       tr:nth-child(even) {
-        background-color: #f9f9f9; /* Removed gray background for '짝' rows */
+        background-color: #f9f9f9;
       }
       .pagination {
         display: flex;
@@ -92,27 +93,26 @@
       }
       .download-container button {
         margin-right: 10px;
-        padding: 10px 20px; /* Adjust padding for the button */
-        font-size: 16px; /* Ensure the font size matches the icon size */
+        padding: 10px 20px;
+        font-size: 16px;
       }
       .download-container img {
-        height: 24px; /* Adjust size to match text size */
-        filter: invert(100%); /* White color for the image */
+        height: 24px;
+        filter: invert(100%);
       }
       .hidden {
         display: none;
       }
       i {
         position: absolute;
-        top: 30px; /* 페이지 상단에서 10px 떨어진 위치 */
-        left: 30px; /* 왼쪽에서 10px 떨어진 위치 */
+        top: 30px;
+        left: 30px;
         font-size: 45px;
         color: black;
         cursor: pointer;
-        z-index: 1002; /* 다른 요소들 위에 배치 */
+        z-index: 1002;
         margin-bottom: 20px;
       }
-      /* 배경을 어둡게 처리하는 오버레이 */
       .overlay {
         position: fixed;
         top: 0;
@@ -123,7 +123,6 @@
         display: none;
         z-index: 1000;
       }
-      /* 사이드바 스타일 */
       .sidebar {
         position: fixed;
         top: 0;
@@ -145,7 +144,7 @@
       .sidebar a {
         color: white;
         text-decoration: none;
-        font-size: 18px;
+        font-size: 16px;
         margin: 15px 0;
         transition: color 0.3s;
       }
@@ -166,6 +165,39 @@
         cursor: pointer;
         z-index: 1002;
       }
+
+      /* 다크모드 */
+      @media (prefers-color-scheme: dark) {
+        body {
+          background-color: #181818;
+          color: #e0e0e0;
+        }
+
+        .container {
+          background-color: #2c2c2c;
+          color: #f4f4f4;
+        }
+
+        table th {
+          background-color: #333;
+          color: #fff;
+        }
+
+        table tr:nth-child(even) {
+          background-color: #242424;
+        }
+
+        button {
+          background-color: #0056b3;
+        }
+
+        button:hover {
+          background-color: #003f7f;
+        }
+        i {
+          color: white;
+        }
+      }
     </style>
   </head>
   <body>
@@ -185,6 +217,14 @@
       <a href="https://arcapredict.kro.kr/tree/predict.html">나무게임 예측</a>
       <a href="https://arcapredict.kro.kr/tree/recent.html">나무게임 기록</a>
       <a href="https://arcapredict.kro.kr/tree/main.html">나무게임 통계</a>
+      <a href="https://masterruma.github.io/simplenotepad/"
+        >[AD] 공유용 메모장</a
+      >
+      <a href="https://masterruma.github.io/micro_timer/"
+        >[AD] 전자레인지 와트 계산</a
+      >
+      <a href="https://masterruma.github.io/googlewget/">[AD] WGET 변환기</a>
+      <a href="http://152.67.223.175:8000/">[AD] 버터 클릭커</a>
     </div>
     <script>
       // 사이드 메뉴와 오버레이 보이기/숨기기 기능

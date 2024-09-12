@@ -119,7 +119,7 @@
       .sidebar a {
         color: white;
         text-decoration: none;
-        font-size: 18px;
+        font-size: 16px;
         margin: 15px 0;
         transition: color 0.3s;
       }
@@ -140,7 +140,62 @@
         cursor: pointer;
         z-index: 1002;
       }
+
+      /* 다크모드 적용 */
+      @media (prefers-color-scheme: dark) {
+        body {
+          background-color: #181818;
+          color: #e0e0e0;
+        }
+
+        h1 {
+          color: #ffffff;
+        }
+
+        table {
+          border-color: #555;
+        }
+
+        th {
+          background-color: #00509e;
+          color: #ffffff;
+        }
+
+        td {
+          background-color: #1e1e1e;
+          color: #e0e0e0;
+        }
+
+        .button-container a button {
+          background-color: #00509e;
+        }
+
+        .button-container a button:hover {
+          background-color: #00376e;
+        }
+
+        i {
+          color: white;
+        }
+
+        .overlay {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar {
+          background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        .sidebar a {
+          color: #ccc;
+        }
+
+        .sidebar a:hover {
+          color: #66bb6a;
+        }
+      }
     </style>
+
     <script>
       window.addEventListener("DOMContentLoaded", function () {
         let xhr = new XMLHttpRequest();
@@ -174,6 +229,14 @@
       <a href="https://arcapredict.kro.kr/tree/predict.html">나무게임 예측</a>
       <a href="https://arcapredict.kro.kr/tree/recent.html">나무게임 기록</a>
       <a href="https://arcapredict.kro.kr/tree/main.html">나무게임 통계</a>
+      <a href="https://masterruma.github.io/simplenotepad/"
+        >[AD] 공유용 메모장</a
+      >
+      <a href="https://masterruma.github.io/micro_timer/"
+        >[AD] 전자레인지 와트 계산</a
+      >
+      <a href="https://masterruma.github.io/googlewget/">[AD] WGET 변환기</a>
+      <a href="http://152.67.223.175:8000/">[AD] 버터 클릭커</a>
     </div>
     <script>
       // 사이드 메뉴와 오버레이 보이기/숨기기 기능
@@ -213,7 +276,7 @@
 
     <div class="button-container">
       <a href="https://arca.live/b/namugame" target="_blank">
-        <button>아카라이브 온도계 바로가기</button>
+        <button>아카라이브 나무게임 바로가기</button>
       </a>
     </div>
   </body>
