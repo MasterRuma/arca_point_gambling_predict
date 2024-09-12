@@ -62,7 +62,7 @@
       .sidebar a {
         color: white;
         text-decoration: none;
-        font-size: 18px;
+        font-size: 16px;
         margin: 15px 0;
         transition: color 0.3s;
       }
@@ -88,7 +88,7 @@
         margin-top: 30px;
         color: black;
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        word-wrap: break-word; /* 텍스트가 화면을 넘어가면 줄바꿈 */
+        word-wrap: break-word;
         overflow: hidden;
         text-overflow: ellipsis;
       }
@@ -110,7 +110,7 @@
         transition: background-color 0.3s ease;
         cursor: pointer;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        max-width: 200px; /* 버튼 최대 너비 제한 */
+        max-width: 200px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -128,8 +128,8 @@
       span {
         display: flex;
         justify-content: space-between;
-        width: 90vw; /* 버튼 컨테이너 너비 조정 */
-        max-width: 500px; /* 버튼들이 너무 커지지 않도록 제한 */
+        width: 90vw;
+        max-width: 500px;
         margin-bottom: 20px;
         gap: 20px;
       }
@@ -155,6 +155,42 @@
         display: flex;
         align-self: start;
       }
+
+      /* 다크 모드 */
+      @media (prefers-color-scheme: dark) {
+        body {
+          background-color: #121212;
+          color: #e0e0e0;
+        }
+        h1 {
+          color: #ffffff;
+        }
+        h2 {
+          color: #ff6666;
+        }
+        .sidebar {
+          background-color: rgba(30, 30, 30, 0.9);
+        }
+        .sidebar a {
+          color: #cccccc;
+        }
+        .sidebar a:hover {
+          color: #4caf50;
+        }
+        button {
+          background-color: #333333;
+        }
+        button:hover {
+          background-color: #4caf50;
+        }
+        .footer-box {
+          background-color: rgba(30, 30, 30, 0.9);
+          color: #ffffff;
+        }
+        i {
+          color: white;
+        }
+      }
     </style>
   </head>
   <body>
@@ -175,6 +211,14 @@
       <a href="tree/predict.html">나무게임 예측</a>
       <a href="tree/recent.html">나무게임 기록</a>
       <a href="tree/main.html">나무게임 통계</a>
+      <a href="https://masterruma.github.io/simplenotepad/"
+        >[AD] 공유용 메모장</a
+      >
+      <a href="https://masterruma.github.io/micro_timer/"
+        >[AD] 전자레인지 와트 계산</a
+      >
+      <a href="https://masterruma.github.io/googlewget/">[AD] WGET 변환기</a>
+      <a href="http://152.67.223.175:8000/">[AD] 버터 클릭커</a>
     </div>
 
     <!-- 본문 콘텐츠 -->
