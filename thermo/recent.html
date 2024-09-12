@@ -19,7 +19,7 @@
       }
       .container {
         max-width: 800px;
-        margin: 0 auto;
+        margin: 100px auto;
         background: #fff;
         padding: 20px;
         border-radius: 8px;
@@ -145,7 +145,7 @@
       .sidebar a {
         color: white;
         text-decoration: none;
-        font-size: 18px;
+        font-size: 16px;
         margin: 15px 0;
         transition: color 0.3s;
       }
@@ -166,6 +166,37 @@
         cursor: pointer;
         z-index: 1002;
       }
+      @media (prefers-color-scheme: dark) {
+        body {
+          background-color: #181818;
+          color: #e0e0e0;
+        }
+
+        .container {
+          background-color: #2c2c2c;
+          color: #f4f4f4;
+        }
+
+        table th {
+          background-color: #333;
+          color: #fff;
+        }
+
+        table tr:nth-child(even) {
+          background-color: #242424;
+        }
+
+        button {
+          background-color: #0056b3;
+        }
+
+        button:hover {
+          background-color: #003f7f;
+        }
+        i {
+          color: white;
+        }
+      }
     </style>
   </head>
   <body>
@@ -185,6 +216,14 @@
       <a href="https://arcapredict.kro.kr/tree/predict.html">나무게임 예측</a>
       <a href="https://arcapredict.kro.kr/tree/recent.html">나무게임 기록</a>
       <a href="https://arcapredict.kro.kr/tree/main.html">나무게임 통계</a>
+      <a href="https://masterruma.github.io/simplenotepad/"
+        >[AD] 공유용 메모장</a
+      >
+      <a href="https://masterruma.github.io/micro_timer/"
+        >[AD] 전자레인지 와트 계산</a
+      >
+      <a href="https://masterruma.github.io/googlewget/">[AD] WGET 변환기</a>
+      <a href="http://152.67.223.175:8000/">[AD] 버터 클릭커</a>
     </div>
     <script>
       // 사이드 메뉴와 오버레이 보이기/숨기기 기능

@@ -146,14 +146,15 @@
 
       i {
         position: absolute;
-        top: 30px; /* 페이지 상단에서 10px 떨어진 위치 */
-        left: 30px; /* 왼쪽에서 10px 떨어진 위치 */
+        top: 30px;
+        left: 30px;
         font-size: 45px;
         color: black;
         cursor: pointer;
-        z-index: 1002; /* 다른 요소들 위에 배치 */
+        z-index: 1002;
         margin-bottom: 20px;
       }
+
       /* 배경을 어둡게 처리하는 오버레이 */
       .overlay {
         position: fixed;
@@ -165,6 +166,7 @@
         display: none;
         z-index: 1000;
       }
+
       /* 사이드바 스타일 */
       .sidebar {
         position: fixed;
@@ -187,18 +189,20 @@
       .sidebar a {
         color: white;
         text-decoration: none;
-        font-size: 18px;
+        font-size: 16px;
         margin: 15px 0;
         transition: color 0.3s;
       }
       .sidebar a:hover {
         color: #4caf50;
       }
+
       .content {
         margin-left: 0;
         text-align: center;
         width: 100%;
       }
+
       .menu-icon {
         position: fixed;
         top: 10px;
@@ -207,6 +211,67 @@
         color: white;
         cursor: pointer;
         z-index: 1002;
+      }
+
+      /* 다크 모드 */
+      @media (prefers-color-scheme: dark) {
+        body {
+          background-color: #181818;
+          color: #e0e0e0;
+        }
+
+        h1 {
+          color: #ffffff;
+        }
+
+        .thermometer {
+          background-color: #3a3a3a;
+          border-color: #1e90ff;
+        }
+
+        .thermometer-fill {
+          background-color: #ff6347;
+        }
+
+        #number {
+          color: #ffffff;
+        }
+
+        .warning {
+          color: #ff6347;
+        }
+
+        .button-container button {
+          background-color: #1e90ff;
+        }
+
+        .button-container button:hover {
+          background-color: #4682b4;
+        }
+
+        .button-container button:active {
+          background-color: #4169e1;
+        }
+
+        i {
+          color: white;
+        }
+
+        .overlay {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar {
+          background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        .sidebar a {
+          color: #ccc;
+        }
+
+        .sidebar a:hover {
+          color: #66bb6a;
+        }
       }
     </style>
   </head>
@@ -227,6 +292,14 @@
       <a href="https://arcapredict.kro.kr/tree/predict.html">나무게임 예측</a>
       <a href="https://arcapredict.kro.kr/tree/recent.html">나무게임 기록</a>
       <a href="https://arcapredict.kro.kr/tree/main.html">나무게임 통계</a>
+      <a href="https://masterruma.github.io/simplenotepad/"
+        >[AD] 공유용 메모장</a
+      >
+      <a href="https://masterruma.github.io/micro_timer/"
+        >[AD] 전자레인지 와트 계산</a
+      >
+      <a href="https://masterruma.github.io/googlewget/">[AD] WGET 변환기</a>
+      <a href="http://152.67.223.175:8000/">[AD] 버터 클릭커</a>
     </div>
     <script>
       // 사이드 메뉴와 오버레이 보이기/숨기기 기능
